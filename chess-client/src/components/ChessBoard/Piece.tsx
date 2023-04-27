@@ -28,24 +28,19 @@ export function Piece(props: Props) {
   }, [preview]);
 
   return (
-		<div
-			ref={dragRef}
-			className={`board-piece ${
-			  isDragging ? 'board-piece-dragging ' : undefined
-			}`}
-			style={{
-			  backgroundImage: `url(${img})`,
-			  width: '100%',
-			  height: '100%',
-			  backgroundRepeat: 'no-repeat',
-			  backgroundPosition: 'center',
-			  backgroundSize: '100%',
-			  backgroundColor: 'transparent',
-			  opacity: isDragging ? 0 : 1,
-			  filter: isCheckPosition
-			    ? 'drop-shadow(0px 0px 10px rgba(214, 48, 49,1.0))'
-			    : undefined,
-			}}
-		/>
+    <div
+      ref={dragRef}
+      className={`board-piece ${isDragging ? 'board-piece-dragging ' : undefined}`}
+      style={{
+        backgroundImage: isDragging ? undefined : `url(${img})`,
+        width: '100%',
+        height: '100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '100%',
+        backgroundColor: 'transparent',
+        filter: isCheckPosition ? 'drop-shadow(0px 0px 10px rgba(214, 48, 49,1.0))' : undefined,
+      }}
+    />
   );
 }

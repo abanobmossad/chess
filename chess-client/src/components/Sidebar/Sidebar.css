@@ -1,0 +1,27 @@
+.sidebar-container {
+	width: 30%;
+	background-color: #272522;
+  padding: 10px;
+}
+
+/* scroll bar */
+/* Works on Chrome, Edge, and Safari */
+.sidebar-history-scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-history-scroller::-webkit-scrollbar-thumb {
+  background-color: #F89D17;
+  border-radius: 20px;
+}
+/* ---- end scroll bar */
+
+.sidebar-history-scroller {
+  height: 300px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.sidebar-history-scroller {
+  overflow-y: auto;
+}
