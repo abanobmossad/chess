@@ -12,7 +12,7 @@ interface Props {
 export function Piece(props: Props) {
   const { piece, position, isCheckPosition } = props;
   const id = `${piece.color}${piece.type}`;
-  const img = ['pieces-pack', 'standard', `${id}.png`].join('/');
+  const img = ['/pieces-pack', 'standard', `${id}.png`].join('/');
 
   const [{ isDragging }, dragRef, preview] = useDrag(
     () => ({

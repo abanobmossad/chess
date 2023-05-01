@@ -1,11 +1,12 @@
 import './App.css';
-import { Game } from './pages/Game';
+import { RouterProvider } from 'react-router-dom';
+import appRoute from './routes/app.routes';
 
 function App() {
   return (
-		<div className="app-container">
-			<Game />
-		</div>
+    <div className="app-container">
+      <RouterProvider router={appRoute} />
+    </div>
   );
 }
 

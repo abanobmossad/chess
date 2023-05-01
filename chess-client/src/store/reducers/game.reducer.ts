@@ -5,8 +5,8 @@ import { GameState } from '../../common/interfaces';
 import { CHESS_SYMBOLS } from '../../common/constants';
 
 const chess = new Chess();
-const moveSound = new Audio('sounds/move.mp3');
-const captureSound = new Audio('sounds/capture.mp3');
+const moveSound = new Audio('/sounds/move.mp3');
+const captureSound = new Audio('/sounds/capture.mp3');
 
 const initialState: GameState = {
   chess,
