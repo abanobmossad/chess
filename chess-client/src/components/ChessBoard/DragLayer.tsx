@@ -6,12 +6,8 @@ export function DragLayer() {
   const boardWidth = 801;
 
   const getItemStyle = useCallback(
-    (
-      clientOffset: XYCoord | null,
-      sourceClientOffset: XYCoord | null,
-    ) => {
-      if (!clientOffset || !sourceClientOffset)
-        return { display: 'none' };
+    (clientOffset: XYCoord | null, sourceClientOffset: XYCoord | null) => {
+      if (!clientOffset || !sourceClientOffset) return { display: 'none' };
 
       let { x, y } = snapToCursor ? clientOffset : sourceClientOffset;
       if (snapToCursor) {
@@ -32,37 +28,27 @@ export function DragLayer() {
   );
 
   const collectedProps = useDragLayer((monitor) => ({
-    item: monitor.getItem(),
+    item: monitor.getItem() as { img: string },
     clientOffset: monitor.getClientOffset(),
     sourceClientOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
   }));
 
-  const {
-    isDragging,
-    item,
-    clientOffset,
-    sourceClientOffset,
-  }: {
-    item: { img: string };
-    clientOffset: XYCoord | null;
-    sourceClientOffset: XYCoord | null;
-    isDragging: boolean;
-  } = collectedProps;
-
+  const { isDragging, item, clientOffset, sourceClientOffset } = collectedProps;
 
   return isDragging ? (
-		<div
-			style={{
-			  position: 'fixed',
-			  pointerEvents: 'none',
-			  zIndex: 10,
-			  left: 0,
-			  top: 0,
-			}}>
-			<div style={getItemStyle(clientOffset, sourceClientOffset)}>
-				<img src={item.img} width={100} height={100} />
-			</div>
-		</div>
+    <div
+      style={{
+        position: 'fixed',
+        pointerEvents: 'none',
+        left: 0,
+        top: 0,
+        cursor: 'grabbing',
+      }}
+    >
+      <div style={getItemStyle(clientOffset, sourceClientOffset)}>
+        <img src={item.img} width={100} height={100} />
+      </div>
+    </div>
   ) : null;
 }

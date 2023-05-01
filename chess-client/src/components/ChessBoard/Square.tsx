@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Piece as ChessPiece } from 'chess.js';
 import { useDrop } from 'react-dnd';
 import { Piece } from './Piece';
@@ -13,15 +14,30 @@ interface Props {
 
 export function Square(props: Props) {
   const { piece, isBlack, position } = props;
+
   const {
     game: { chess, activePiece },
     theme: { board: boardTheme },
   } = useAppSelector((state) => state);
 
-  const checkPosition =
-		chess.isCheck() &&
-		getPiecePosition(chess.board(), { type: 'k', color: chess.turn() });
-  const isCheckPosition = checkPosition && checkPosition === position;
+  const defaultBackgroundColor = isBlack ? boardTheme.black : boardTheme.white;
+  const [backgroundColor, setBackgroundColor] = useState(defaultBackgroundColor);
+  const [isRightClickActive, setRightClicked] = useState(false);
+  // moved highlights
+  useEffect(() => {
+    if (activePiece.from === position || activePiece.to === position) {
+      setBackgroundColor((b) => `color-mix(in srgb, ${boardTheme.moveHighlight} 40%, ${b})`);
+    } else setBackgroundColor(defaultBackgroundColor);
+  }, [activePiece, boardTheme.moveHighlight, position, defaultBackgroundColor]);
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (piece) {
+      if (isRightClickActive) setBackgroundColor(defaultBackgroundColor);
+      else setBackgroundColor((b) => `color-mix(in srgb, red 70%, ${b})`);
+      setRightClicked((cur) => !cur);
+    }
+  };
 
   const dispatch = useAppDispatch();
   const [, dropRef] = useDrop(() => ({
@@ -31,25 +47,18 @@ export function Square(props: Props) {
     },
   }));
 
-  // moved highlights
-  let backgroundColor = isBlack ? boardTheme.black : boardTheme.white;
-  if (activePiece.from === position || activePiece.to === position) {
-    backgroundColor = `color-mix(in srgb, ${boardTheme.moveHighlight} 40%, ${backgroundColor})`;
-  }
+  const checkPosition = chess.isCheck() && getPiecePosition(chess.board(), { type: 'k', color: chess.turn() });
+  const isCheckPosition = checkPosition && checkPosition === position;
 
   return (
-		<div
-			id={position}
-			className="board-square"
-			style={{ backgroundColor }}
-			ref={dropRef}>
-			{piece && (
-				<Piece
-					piece={piece}
-					position={position}
-					isCheckPosition={isCheckPosition}
-				/>
-			)}
-		</div>
+    <div
+      id={position}
+      className="board-square"
+      style={{ backgroundColor }}
+      ref={dropRef}
+      onContextMenu={handleRightClick}
+    >
+      {piece && <Piece piece={piece} position={position} isCheckPosition={isCheckPosition} />}
+    </div>
   );
 }

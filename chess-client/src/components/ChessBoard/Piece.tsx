@@ -14,14 +14,16 @@ export function Piece(props: Props) {
   const id = `${piece.color}${piece.type}`;
   const img = ['pieces-pack', 'standard', `${id}.png`].join('/');
 
-  const [{ isDragging }, dragRef, preview] = useDrag(() => ({
-    type: 'piece',
-    item: { id, position, img },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+  const [{ isDragging }, dragRef, preview] = useDrag(
+    () => ({
+      type: 'piece',
+      item: () => ({ id, position, img }),
+      collect: (monitor) => {
+        return { isDragging: !!monitor.isDragging() };
+      },
     }),
-    options: { dropEffect: 'move' },
-  }));
+    [id, position],
+  );
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
@@ -30,7 +32,7 @@ export function Piece(props: Props) {
   return (
     <div
       ref={dragRef}
-      className={`board-piece ${isDragging ? 'board-piece-dragging ' : undefined}`}
+      className={'board-piece ' + (isDragging ? 'board-piece-dragging ' : undefined)}
       style={{
         backgroundImage: isDragging ? undefined : `url(${img})`,
         width: '100%',
@@ -39,6 +41,7 @@ export function Piece(props: Props) {
         backgroundPosition: 'center',
         backgroundSize: '100%',
         backgroundColor: 'transparent',
+        touchAction: 'none',
         filter: isCheckPosition ? 'drop-shadow(0px 0px 10px rgba(214, 48, 49,1.0))' : undefined,
       }}
     />

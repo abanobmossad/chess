@@ -3,7 +3,6 @@ import { useAppSelector } from '../../store/hooks';
 import { getSquarePosition, isBlackSquare } from '../../utils/board.utils';
 import './Board.css';
 import { Square } from './Square';
-import { DragLayer } from './DragLayer';
 
 export function Board() {
   const {
@@ -28,7 +27,6 @@ export function Board() {
 					headShape="circle"
 				/>
 			)}
-			<DragLayer />
 			<div className="board">
 				{board.flat().map((p, i) => {
 				  const position = getSquarePosition(i);

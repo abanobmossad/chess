@@ -1,7 +1,9 @@
 .sidebar-container {
-	width: 30%;
-	background-color: #272522;
+  width: 20%;
+  background-color: #272522;
   padding: 10px;
+  border-radius: 5px;
+  position: relative;
 }
 
 /* scroll bar */
@@ -11,17 +13,23 @@
 }
 
 .sidebar-history-scroller::-webkit-scrollbar-thumb {
-  background-color: #F89D17;
+  background-color: #f89d17;
   border-radius: 20px;
 }
 /* ---- end scroll bar */
 
 .sidebar-history-scroller {
   height: 300px;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
-.sidebar-history-scroller {
-  overflow-y: auto;
+.sidebar-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  width: 100%;
+  padding: 10px;
 }

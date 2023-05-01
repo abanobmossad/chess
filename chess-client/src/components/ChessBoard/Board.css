@@ -1,6 +1,5 @@
 .board-container {
-	width: 50vw;
-	height: 80vh;
+	width: 40%;
 	border-radius: 5px;
 	overflow: hidden;
 }
@@ -23,8 +22,10 @@
 
 .board-piece {
 	cursor: grab;
+	cursor: -webkit-grab;
 }
 
 .board-piece:active {
 	cursor: grabbing;
+	cursor: -webkit-grabbing;
 }

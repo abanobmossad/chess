@@ -3,6 +3,8 @@
   flex-direction: row;  
   justify-content: center;
   gap: 20px;
+  width: 80vw;
+  height: 80vh;
 }
 
 .game-container:nth-child(1) {
