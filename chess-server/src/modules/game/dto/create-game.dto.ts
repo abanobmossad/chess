@@ -1,6 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateGameDto {
+  @IsNotEmpty()
   creatorId: string;
 
   @IsNotEmpty()

@@ -1,23 +1,27 @@
 import {
   Body,
   Controller,
-  Ip,
   Post,
   UsePipes,
   ValidationPipe,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 
 @Controller('/game')
 export class GameController {
-  constructor(private readonly appService: GameService) {}
+  constructor(private readonly gameService: GameService) {}
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
-  startGame(@Body() createGameDto: CreateGameDto, @Ip() ip: string) {
-    const dto: CreateGameDto = { ...createGameDto, creatorId: ip };
+  startGame(@Body() createGameDto: CreateGameDto) {
+    return this.gameService.createGame(createGameDto);
+  }
 
-    return this.appService.createGame(dto);
+  @Get('/:id')
+  getGame(@Param('id') id: string) {
+    return this.gameService.findGameById(id);
   }
 }

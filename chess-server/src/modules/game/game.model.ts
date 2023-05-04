@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
 @Schema({ autoCreate: true })
@@ -30,6 +30,9 @@ export class Game {
   @Prop({ required: true })
   position: string;
 
+  @Prop([])
+  board?: string[][];
+
   @Prop({ default: false })
   isGameStarted?: boolean;
 
@@ -39,8 +42,22 @@ export class Game {
   @Prop()
   gameOverDetails?: string;
 
+  @Prop(
+    raw({
+      from: { type: String },
+      to: { type: String },
+    }),
+  )
+  activePiece?: Record<string, any>;
+
   @Prop([[String]])
   history: string[][];
+
+  @Prop([])
+  capturedWhitePieces?: any[];
+
+  @Prop([])
+  capturedBlackPieces?: any[];
 }
 
 export type GameDocument = HydratedDocument<Game>;

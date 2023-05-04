@@ -30,7 +30,7 @@ function RadioCard(props: any) {
 }
 
 interface Props {
-  onChange?(): string;
+  onChange?(v: string): void;
 }
 
 const playAsImages = {
@@ -45,7 +45,7 @@ export function PlayAsRadioBtn(props: Props) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'framework',
     defaultValue: 'r',
-    onChange: console.log || props.onChange,
+    onChange: props.onChange,
   });
 
   const group = getRootProps();

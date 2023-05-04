@@ -16,7 +16,7 @@ export function Square(props: Props) {
   const { piece, isBlack, position } = props;
 
   const {
-    game: { chess, activePiece },
+    game: { chess, activePiece, board, playAs },
     theme: { board: boardTheme },
   } = useAppSelector((state) => state);
 
@@ -47,7 +47,7 @@ export function Square(props: Props) {
     },
   }));
 
-  const checkPosition = chess.isCheck() && getPiecePosition(chess.board(), { type: 'k', color: chess.turn() });
+  const checkPosition = chess.isCheck() && getPiecePosition(board, { type: 'k', color: chess.turn() }, playAs === 'b');
   const isCheckPosition = checkPosition && checkPosition === position;
 
   return (

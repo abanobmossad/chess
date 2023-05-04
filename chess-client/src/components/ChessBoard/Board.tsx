@@ -6,7 +6,7 @@ import { Square } from './Square';
 
 export function Board() {
   const {
-    game: { board, activePiece },
+    game: { board, activePiece, playAs },
     theme: { board: boardTheme },
     settings: { game: gameSettings },
   } = useAppSelector((state) => state);
@@ -28,8 +28,8 @@ export function Board() {
 				/>
 			)}
 			<div className="board">
-				{board.flat().map((p, i) => {
-				  const position = getSquarePosition(i);
+				{board.map((p, i) => {
+				  const position = getSquarePosition(i, playAs === 'b');
 				  return (
 						<Square
 							key={position}

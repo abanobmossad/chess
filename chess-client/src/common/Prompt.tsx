@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { useBeforeUnload, unstable_useBlocker as useBlocker } from 'react-router-dom';
+import { GameSocket } from '../server';
+import { GameSocketEvents } from './events.enum';
+import { useAppSelector } from '../store/hooks';
 
 function usePrompt(message: string | null | undefined | false, { beforeUnload }: { beforeUnload?: boolean } = {}) {
+  const { gameId, userName, userId  } = useAppSelector((state) => state.game);
+
   const blocker = useBlocker(
     React.useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message]),
   );
@@ -11,7 +16,12 @@ function usePrompt(message: string | null | undefined | false, { beforeUnload }:
       blocker.reset();
     }
     prevState.current = blocker.state;
-  }, [blocker]);
+
+    // leaving the game
+    window.addEventListener('unload', () => {
+      GameSocket.emit(GameSocketEvents.LEAVED_GAME, { gameId, userId, userName });
+    });
+  }, [blocker, gameId, userId, userName]);
 
   useBeforeUnload(
     React.useCallback(

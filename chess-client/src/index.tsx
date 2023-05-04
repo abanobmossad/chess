@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <IconContext.Provider value={{ size: '17px', style: { display: 'inline' } }}>
         <ChakraBaseProvider theme={theme}>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-          <App />
+            <App />
         </ChakraBaseProvider>
       </IconContext.Provider>
     </Provider>
