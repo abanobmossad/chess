@@ -11,6 +11,8 @@ export class PlayMoveDto {
   from: string;
   @IsNotEmpty()
   to: string;
+  @IsNotEmpty()
+  currentTurn: string;
 
   isGameOver?: boolean;
   gameOverDetails?: string;

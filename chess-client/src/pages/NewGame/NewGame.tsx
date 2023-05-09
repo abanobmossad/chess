@@ -13,7 +13,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { PlayAsRadioBtn } from './PlayAsRadioBtn';
-import { FaClock } from 'react-icons/fa';
+import { FaChessKing, FaClock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -50,8 +50,8 @@ export function NewGame() {
         toast({
           title: 'Game Created.',
           description: 'Game is starting.',
-          status: 'success',
-          duration: 9000,
+          status: 'warning',
+          duration: 5000,
           isClosable: true,
         });
         navigate(`play/${game._id}`);
@@ -61,7 +61,7 @@ export function NewGame() {
           title: 'Some thing went wrong',
           description: e.response?.data?.message || e.message,
           status: 'error',
-          duration: 9000,
+          duration: 5000,
           isClosable: true,
         });
         setLoading(false);
@@ -113,6 +113,7 @@ export function NewGame() {
             size="md"
             width="100%"
             onClick={handleStartGame}
+            leftIcon={<FaChessKing />}
           >
             Play
           </Button>

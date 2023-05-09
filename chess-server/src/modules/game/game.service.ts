@@ -33,8 +33,7 @@ export class GameService {
 
   async startGame(dto: JoinGameDto): Promise<Game> {
     const game = await this.findGameById(dto.gameId);
-    if (game.isGameStarted || game.creatorId === dto.userId || !dto.userName)
-      return game;
+    if (game.creatorId === dto.userId || !dto.userName) return game;
 
     return this.gameModel.findByIdAndUpdate(
       { _id: dto.gameId },
@@ -47,6 +46,18 @@ export class GameService {
     );
   }
 
+  async leaveGame(dto: JoinGameDto): Promise<Game> {
+    const game = await this.findGameById(dto.gameId);
+    if (game.opponentId === dto.userId) {
+      game.opponentId = null;
+      game.opponentName = null;
+    }
+
+    return this.gameModel.findByIdAndUpdate({ _id: dto.gameId }, game, {
+      new: true,
+    });
+  }
+
   async movePiece(dto: PlayMoveDto): Promise<Game> {
     return this.gameModel.findByIdAndUpdate(
       dto.gameId,
@@ -56,6 +67,7 @@ export class GameService {
         position: dto.position,
         activePiece: dto.activePiece,
         board: dto.board,
+        currentTurn: dto.currentTurn,
       },
       { new: true },
     );

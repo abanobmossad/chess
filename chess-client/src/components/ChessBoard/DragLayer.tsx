@@ -1,31 +1,33 @@
-import { useCallback } from 'react';
 import { useDragLayer, XYCoord } from 'react-dnd';
 
-export function DragLayer() {
-  const snapToCursor = true;
-  const boardWidth = 801;
+export function DragLayer({ boardRef }: { boardRef: React.RefObject<HTMLElement> }) {
+  const getItemStyle = (sourceClientOffset: XYCoord | null) => {
+    if (!sourceClientOffset) return { display: 'none' };
+    const boardRect = boardRef?.current?.getBoundingClientRect() || {
+      width: 801,
+      height: 801,
+      top: 100,
+      left: 50,
+      y: 50,
+      x: 50,
+    };
+    let { x, y } = sourceClientOffset;
 
-  const getItemStyle = useCallback(
-    (clientOffset: XYCoord | null, sourceClientOffset: XYCoord | null) => {
-      if (!clientOffset || !sourceClientOffset) return { display: 'none' };
+    // limit movement in the board
+    x = x > boardRect.width + boardRect.y ? boardRect.width + boardRect.y : x;
+    x = x < boardRect.left ? boardRect.left : x;
 
-      let { x, y } = snapToCursor ? clientOffset : sourceClientOffset;
-      if (snapToCursor) {
-        const halfSquareWidth = boardWidth / 8 / 2;
-        x -= halfSquareWidth;
-        y -= halfSquareWidth;
-      }
-      const transform = `translate(${x}px, ${y}px)`;
+    y = y > boardRect.height ? boardRect.height : y;
+    y = y < boardRect.top ? boardRect.top : y;
 
-      return {
-        transform,
-        WebkitTransform: transform,
-        touchAction: 'none',
-        cursor: 'grabbing',
-      };
-    },
-    [boardWidth, snapToCursor],
-  );
+    const transform = `translate(${x}px, ${y}px)`;
+    return {
+      transform,
+      WebkitTransform: transform,
+      touchAction: 'none',
+      cursor: 'grabbing',
+    };
+  };
 
   const collectedProps = useDragLayer((monitor) => ({
     item: monitor.getItem() as { img: string },
@@ -34,7 +36,7 @@ export function DragLayer() {
     isDragging: monitor.isDragging(),
   }));
 
-  const { isDragging, item, clientOffset, sourceClientOffset } = collectedProps;
+  const { isDragging, item, sourceClientOffset } = collectedProps;
 
   return isDragging ? (
     <div
@@ -46,7 +48,7 @@ export function DragLayer() {
         cursor: 'grabbing',
       }}
     >
-      <div style={getItemStyle(clientOffset, sourceClientOffset)}>
+      <div style={getItemStyle(sourceClientOffset)}>
         <img src={item.img} width={100} height={100} />
       </div>
     </div>

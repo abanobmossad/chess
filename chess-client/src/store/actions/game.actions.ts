@@ -33,6 +33,12 @@ export const joinGameAction = createAction('JOIN_GAME', function (userName: stri
   };
 });
 
+export const leaveGameAction = createAction('LEAVE_GAME', function (userId: string, userName: string, isOpponentLeft: boolean) {
+  return {
+    payload: { userId, userName, isOpponentLeft },
+  };
+});
+
 export const joinedToGameAction = createAction('JOINED_GAME', function (userId: string, userName: string, game: any) {
   return {
     payload: { userId, userName, game },

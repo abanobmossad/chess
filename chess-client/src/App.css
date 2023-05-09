@@ -1,11 +1,6 @@
 @import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -26,8 +21,19 @@
 	font-family: "Droid Arabic Kufi", sans-serif;
 }
 
+/* scroll bar */
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #FBD38D;
+  border-radius: 20px;
+}
+/* ---- end scroll bar */
+
 .app-container {
-	display: flex;
-	justify-content: center;
-	margin-top: 5%;
+	width: 100vw;
+	height: 100vh;
 }

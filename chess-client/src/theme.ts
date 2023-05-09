@@ -18,6 +18,7 @@ const theme = extendTheme({
   },
   colors: {
     gray: {
+      500: '#312e2b',
       700: '#272522',
     },
   },

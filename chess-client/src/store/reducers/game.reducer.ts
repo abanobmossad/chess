@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 import Cookies from 'js-cookie';
 import { Chess } from 'chess.js';
-import { gameMoveAction, joinGameAction, joinedToGameAction, loadGameAction, startGameAction } from '../actions/game.actions';
+import { gameMoveAction, joinGameAction, joinedToGameAction, leaveGameAction, loadGameAction, startGameAction } from '../actions/game.actions';
 import { ChessBoard, GameState, SocketGameMoveEvent } from '../../common/interfaces';
 import { CHESS_SYMBOLS } from '../../common/constants';
 import { GameSocket } from '../../server';
@@ -11,6 +11,8 @@ import { GameSocketEvents } from '../../common/events.enum';
 const chess = new Chess();
 const moveSound = new Audio('/sounds/move.mp3');
 const captureSound = new Audio('/sounds/capture.mp3');
+const joinSound = new Audio('/sounds/join.mp3');
+const leaveSound = new Audio('/sounds/leave.mp3');
 
 // set user ID
 const userIdCookie = Cookies.get('userId');
@@ -55,8 +57,9 @@ export const gameReducer = createReducer(initialState, (builder) => {
           captureSound.play();
         } else moveSound.play();
 
-        state.board = getGameBoardWithFlip( chess.board(), state.playAs === 'b');
+        state.board = getGameBoardWithFlip(chess.board(), state.playAs === 'b');
         state.activePiece = { from: payload.from, to: payload.to, piece: legalMove.piece };
+        state.currentTurn = chess.turn();
         // update server game state
         GameSocket.emit(GameSocketEvents.PlayMove, {
           from: payload.from,
@@ -65,6 +68,7 @@ export const gameReducer = createReducer(initialState, (builder) => {
           gameId: state.gameId,
           activePiece: state.activePiece,
           board: state.board,
+          currentTurn: chess.turn(),
         } as SocketGameMoveEvent);
       } catch (e) {
         console.log('ILLEGAL MOVE');
@@ -82,7 +86,7 @@ export const gameReducer = createReducer(initialState, (builder) => {
       state.currentTurn = chess.turn();
       state.history = payload.history;
       state.isTheCreator = true;
-      state.board = getGameBoardWithFlip( chess.board(), state.playAs === 'b');
+      state.board = chess.board().flat();
       state.isLoaded = true;
     })
     .addCase(loadGameAction.fulfilled, (state, action) => {
@@ -90,18 +94,22 @@ export const gameReducer = createReducer(initialState, (builder) => {
       chess.load(payload.position);
 
       const isTheCreator = payload.creatorId === state.userId;
+      state.isViewer = state.userId !== payload.opponentId && state.userId !== payload.creatorId;
 
       state.gameId = payload._id;
       state.creatorId = payload.creatorId;
       state.opponentId = payload.opponentId;
       state.userName = Cookies.get('userName');
 
-      state.playAs = isTheCreator ? payload.creatorPlayAs : (payload.creatorPlayAs === 'w' ? 'b' : 'w');
+      let playAs = isTheCreator ? payload.creatorPlayAs : (payload.creatorPlayAs === 'w' ? 'b' : 'w');
+      if (state.isViewer) playAs = 'w';
+
+      state.playAs = playAs;
       state.currentTurn = payload.currentTurn;
       state.history = payload.history;
       state.activePiece = payload.activePiece;
       state.isTheCreator = payload.creatorId === state.userId;
-      state.board = getGameBoardWithFlip( chess.board(), state.playAs === 'b');
+      state.board = getGameBoardWithFlip(chess.board(), state.playAs === 'b');
       state.isLoaded = true;
     })
     .addCase(joinGameAction, (state, action) => {
@@ -128,5 +136,16 @@ export const gameReducer = createReducer(initialState, (builder) => {
         // set the view to be the white
         state.playAs = 'w';
       }
+
+      if (payload.userId !== state.userId) joinSound.play();
+    })
+    .addCase(leaveGameAction, (state, action) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { payload } = action;
+      if (payload.isOpponentLeft) {
+        state.displayedNameTop = '';
+        state.opponentId = '';
+      }
+      if (payload.userId !== state.userId) leaveSound.play();
     });
 });
