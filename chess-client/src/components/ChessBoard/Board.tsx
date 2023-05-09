@@ -8,24 +8,23 @@ import { Square } from './Square';
 export const Board = forwardRef(function Board(_, ref) {
   const {
     game: { board, activePiece, playAs },
-    theme: { board: boardTheme },
-    settings: { game: gameSettings },
+    settings: { board: boardSettings },
   } = useAppSelector((state) => state);
 
   return (
     <UISquare size="80vh" ref={ref}>
-      {activePiece.from && gameSettings.allowArrows && (
+      {activePiece.from && boardSettings.allowArrows && (
         <Xarrow
           start={activePiece.from}
           end={activePiece.to}
-          headSize={1.5}
-          color={boardTheme.arrow}
+          headSize={2}
+          color={boardSettings.arrowColor}
           startAnchor="middle"
           endAnchor="middle"
           strokeWidth={10}
           path={activePiece.piece === 'n' ? 'grid' : 'straight'}
           gridBreak="100%"
-          headShape="circle"
+          headShape={activePiece.piece === 'n' ? 'circle' : 'arrow1'}
         />
       )}
       <div className="board">

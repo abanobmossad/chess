@@ -16,7 +16,7 @@ export const getSquarePosition = (i: number, isFlipped = false) => {
 
 export const isBlackSquare = (i: number) => {
   const { x, y } = getXYPosition(i);
-  return (x + y) % 2 === 1;
+  return (x + y) % 2 === 0;
 };
 
 export const getPiecePosition = (board: ChessBoardFlat, piece: { type: PieceSymbol, color: Color }, isFlipped = false) => {

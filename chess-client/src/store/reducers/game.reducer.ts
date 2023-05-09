@@ -94,21 +94,16 @@ export const gameReducer = createReducer(initialState, (builder) => {
       chess.load(payload.position);
 
       const isTheCreator = payload.creatorId === state.userId;
-      state.isViewer = state.userId !== payload.opponentId && state.userId !== payload.creatorId;
-
       state.gameId = payload._id;
       state.creatorId = payload.creatorId;
       state.opponentId = payload.opponentId;
       state.userName = Cookies.get('userName');
 
-      let playAs = isTheCreator ? payload.creatorPlayAs : (payload.creatorPlayAs === 'w' ? 'b' : 'w');
-      if (state.isViewer) playAs = 'w';
-
-      state.playAs = playAs;
+      state.playAs = isTheCreator ? payload.creatorPlayAs : (payload.creatorPlayAs === 'w' ? 'b' : 'w');
       state.currentTurn = payload.currentTurn;
       state.history = payload.history;
       state.activePiece = payload.activePiece;
-      state.isTheCreator = payload.creatorId === state.userId;
+      state.isTheCreator = isTheCreator;
       state.board = getGameBoardWithFlip(chess.board(), state.playAs === 'b');
       state.isLoaded = true;
     })

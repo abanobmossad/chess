@@ -6,7 +6,6 @@ import {
   IconButton,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -34,7 +33,6 @@ export function ShareGameModal() {
           <ModalHeader>
             <FaShareAlt /> Share Game
           </ModalHeader>
-          <ModalCloseButton />
           <ModalBody>
             <Text>Copy this link and share it with your opponent to start the game.</Text>
             <Box my="10">
@@ -57,9 +55,7 @@ export function ShareGameModal() {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" onClick={onClose}>
-              Done
-            </Button>
+            <Button onClick={onClose}>Done</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

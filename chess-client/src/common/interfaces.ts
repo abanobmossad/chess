@@ -44,14 +44,20 @@ export interface GameState {
   }[]
 }
 
-export interface ThemeState {
-  board: { black: string, white: string, moveHighlight: string, arrow: string },
-}
-
 export interface SETTINGS {
-  game: { allowArrows: boolean }
+  board: {
+    boardThemeName?: string,
+    blackColor: string,
+    whiteColor: string,
+    moveHighlightColor: string,
+    arrowColor: string,
+    piecesSchema: string
+    allowArrows?: boolean
+    playSounds?: boolean
+    showLegalMoves?: boolean
+    allowAnimation?: boolean
+  },
 }
-
 
 export interface SocketGameMoveEvent {
   from: string,

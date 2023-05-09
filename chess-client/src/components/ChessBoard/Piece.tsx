@@ -13,11 +13,12 @@ interface Props {
 export function Piece(props: Props) {
   const {
     game: { currentTurn, isViewer, playAs },
+    settings: { board },
   } = useAppSelector((state) => state);
 
   const { piece, position, isCheckPosition } = props;
   const id = `${piece.color}${piece.type}`;
-  const img = ['/pieces-pack', 'standard', `${id}.png`].join('/');
+  const img = ['/pieces-pack', board.piecesSchema, `${id}.png`].join('/');
 
   const isCanDrag = (() => {
     if (isViewer) return false;

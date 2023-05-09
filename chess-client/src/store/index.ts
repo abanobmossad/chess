@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { gameReducer, settingsReducer, themeReducer } from './reducers';
+import { gameReducer, settingsReducer } from './reducers';
 
 const store = configureStore({
-  reducer: { game: gameReducer, theme: themeReducer, settings: settingsReducer },
+  reducer: { game: gameReducer, settings: settingsReducer },
   middleware: [thunk],
   devTools: true,
 });

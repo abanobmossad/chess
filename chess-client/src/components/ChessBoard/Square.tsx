@@ -17,18 +17,18 @@ export function Square(props: Props) {
 
   const {
     game: { chess, activePiece, board, playAs },
-    theme: { board: boardTheme },
+    settings: { board: boardSettings },
   } = useAppSelector((state) => state);
 
-  const defaultBackgroundColor = isBlack ? boardTheme.black : boardTheme.white;
+  const defaultBackgroundColor = isBlack ? boardSettings.blackColor : boardSettings.whiteColor;
   const [backgroundColor, setBackgroundColor] = useState(defaultBackgroundColor);
   const [isRightClickActive, setRightClicked] = useState(false);
   // moved highlights
   useEffect(() => {
     if (activePiece.from === position || activePiece.to === position) {
-      setBackgroundColor((b) => `color-mix(in srgb, ${boardTheme.moveHighlight} 40%, ${b})`);
+      setBackgroundColor((b) => `color-mix(in srgb, ${boardSettings.moveHighlightColor} 40%, ${b})`);
     } else setBackgroundColor(defaultBackgroundColor);
-  }, [activePiece, boardTheme.moveHighlight, position, defaultBackgroundColor]);
+  }, [activePiece, boardSettings.moveHighlightColor, position, defaultBackgroundColor]);
 
   const handleRightClick = (e: React.MouseEvent) => {
     e.preventDefault();

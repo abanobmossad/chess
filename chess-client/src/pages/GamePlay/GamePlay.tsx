@@ -8,7 +8,7 @@ import { ChessBoard } from '../../components/ChessBoard';
 import { Sidebar } from '../../components/Sidebar';
 import { Prompt } from '../../common/Prompt';
 import { GameSocket } from '../../server';
-import { JoinGameModal } from './JoinGameModal';
+import { JoinGameModal } from '../../components/GameModals';
 import { FaUser } from 'react-icons/fa';
 
 function renderUserName(name: string) {
@@ -22,7 +22,16 @@ function renderUserName(name: string) {
 
 export function GamePlay() {
   // get game id form url path
-  const { gameId, isLoaded, displayedNameTop, displayedNameBottom, userId } = useAppSelector((state) => state.game);
+  const {
+    gameId,
+    isLoaded,
+    displayedNameTop,
+    displayedNameBottom,
+    userId,
+    playAs,
+    capturedBlackPieces,
+    capturedWhitePieces,
+  } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
   const toast = useToast();
@@ -80,11 +89,17 @@ export function GamePlay() {
 
       <div>
         {renderUserName(displayedNameTop)}
+        {playAs === 'b'
+          ? capturedBlackPieces.map((p) => <span key={p.type}>{p.symbol}</span>)
+          : capturedWhitePieces.map((p) => <span key={p.type}>{p.symbol}</span>)}
         <Flex gap="5">
           <ChessBoard />
           <Sidebar />
         </Flex>
         {renderUserName(displayedNameBottom)}
+        {playAs === 'w'
+          ? capturedBlackPieces.map((p) => <span key={p.type}>{p.symbol}</span>)
+          : capturedWhitePieces.map((p) => <span key={p.type}>{p.symbol}</span>)}
       </div>
     </>
   );
