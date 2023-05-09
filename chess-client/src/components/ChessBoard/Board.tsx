@@ -1,5 +1,5 @@
 import Xarrow from 'react-xarrows';
-import { Square as UISquare, forwardRef } from '@chakra-ui/react';
+import { Grid, GridItem, Square as UISquare, forwardRef } from '@chakra-ui/react';
 import { useAppSelector } from '../../store/hooks';
 import { getSquarePosition, isBlackSquare } from '../../utils/board.utils';
 import './Board.css';
@@ -11,8 +11,10 @@ export const Board = forwardRef(function Board(_, ref) {
     settings: { board: boardSettings },
   } = useAppSelector((state) => state);
 
+  const letters = playAs === 'b' ? 'abcdefgh'.split('').reverse() : 'abcdefgh'.split('');
+
   return (
-    <UISquare size="80vh" ref={ref}>
+    <>
       {activePiece.from && boardSettings.allowArrows && (
         <Xarrow
           start={activePiece.from}
@@ -27,12 +29,49 @@ export const Board = forwardRef(function Board(_, ref) {
           headShape={activePiece.piece === 'n' ? 'circle' : 'arrow1'}
         />
       )}
-      <div className="board">
-        {board.map((p, i) => {
-          const position = getSquarePosition(i, playAs === 'b');
-          return <Square key={position} piece={p} isBlack={isBlackSquare(i)} position={position} />;
-        })}
-      </div>
-    </UISquare>
+
+      <UISquare size="80vh" ref={ref}>
+        <Grid
+          templateAreas={`
+                  "coordx chess-board"
+                  "coordx coordy"`}
+          gridTemplateRows={'100% 1fr'}
+          gridTemplateColumns={'20px 1fr'}
+          h="100%"
+          w="100%"
+          gap="1"
+          fontWeight="bold"
+        >
+          <GridItem area={'coordx'} display="flex" flexDirection="column">
+            {letters.map((l, i) => {
+              return (
+                <span key={l} className="board-coordinates" style={{ height: '12%' }}>
+                  {playAs === 'b' ? i + 1 : Math.abs(7 - i + 1)}
+                </span>
+              );
+            })}
+          </GridItem>
+
+          <GridItem area={'chess-board'}>
+            <div className="board">
+              {board.map((p, i) => {
+                const position = getSquarePosition(i, playAs === 'b');
+                return <Square key={position} piece={p} isBlack={isBlackSquare(i)} position={position} />;
+              })}
+            </div>
+          </GridItem>
+
+          <GridItem area={'coordy'} display="flex" justifyContent="space-around">
+            {letters.map((l) => {
+              return (
+                <span key={l} className="board-coordinates" style={{ width: '12%' }}>
+                  {l}
+                </span>
+              );
+            })}
+          </GridItem>
+        </Grid>
+      </UISquare>
+    </>
   );
 });

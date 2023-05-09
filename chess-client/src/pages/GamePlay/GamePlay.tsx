@@ -13,7 +13,7 @@ import { FaUser } from 'react-icons/fa';
 
 function renderUserName(name: string) {
   return (
-    <Tag size="lg" colorScheme="orange" borderRadius="full" my="2">
+    <Tag size="lg" colorScheme="orange" borderRadius="full" my="2" ml={5}>
       <Avatar size="xs" name={name} icon={<FaUser />} ml={-2} mr={2} />
       <TagLabel>{name || 'Waiting to connect'}</TagLabel>
     </Tag>
